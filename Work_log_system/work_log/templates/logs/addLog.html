@@ -1,0 +1,80 @@
+{% extends 'logs/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+      <form>
+
+        <h2>New task</h2>
+        <div class="mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input type="datetime-local" class="form-control" id="date" />
+        </div>
+
+        <div class="mb-3">
+          <label for="task" class="form-label">Task Performed</label>
+          <input type="text" class="form-control" id="task" />
+        </div>
+
+        <div class="mb-3">
+          <label for="Location" class="form-label">Location</label>
+          <input type="text" class="form-control" id="location" />
+        </div>
+
+        <div class="mb-3">
+          <label for="problem" class="form-label">What wes the Problem</label>
+          <input type="text" class="form-control" id="problem" />
+        </div>
+
+        <div class="mb-3">
+          <label for="challenge" class="form-label">challenge Faced</label>
+          <input type="text" class="form-control" id="challenge" />
+        </div>
+
+        <div class="mb-3">
+          <label for="action" class="form-label">Action Taken</label>
+          <input type="text" class="form-control" id="action" />
+        </div>
+
+        <div class="mb-3">
+          <label for="knowledge" class="form-label">Knowledge Earn</label>
+          <input type="text" class="form-control" id="knowledge" />
+        </div>
+          <label for="status" class="form-label">Status</label>
+
+
+          <input
+            class="form-check-input"
+            type="radio"
+            name="status"
+            id="Completed"
+          />
+          <label class="form-check-label" for="Completed">
+            Completed
+          </label>
+
+          <input
+            class="form-check-input"
+            type="radio"
+            name="status"
+            id="InProgress"
+          />
+          <label class="form-check-label" for="InProgress">
+            In Progress
+          </label>
+          
+          <input
+            class="form-check-input"
+            type="radio"
+            name="status"
+            id="pending"
+          />
+          <label class="form-check-label" for="pending">
+            Pending
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+{% endblock %  }
