@@ -23,11 +23,10 @@
 
     <nav>
       <a href="{% url 'logs:dashboard' %}">Dashboard</a>
-      <a href="addLog.html">Add Log</a>
-      <a href="viewLog.html">View Logs</a>
-      <a href="report.html">Reports</a>
-      <a href="login.html">Login</a>
-
+      <a href="{% url 'logs:addLog' %}">Add Log</a>
+      <a href="{% url 'logs:viewLogs' %}">View Logs</a>
+      <a href="{% url 'logs:reports' %}">Reports</a>
+      <a href="{% url 'accounts:login' %}">Login</a>
     </nav>
 
     <div class="container">
