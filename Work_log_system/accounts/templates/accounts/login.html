@@ -1,17 +1,19 @@
-{% extends 'accounts/base.html' %}
-{% load static %}
-{% block content %}
-    <div class="container">
-      <div class="login-card">
-        <h2>Login</h2>
-        <form>
-          <input type="text" placeholder="Email or Username" required />
-          <input type="password" placeholder="Password" required />
-          <button type="submit">Login</button>
-        </form>
-        <div class="form-link">
-          <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
-        </div>
-      </div>
+{% extends 'accounts/base.html' %} {% load static %} {% block content %}
+<div class="container">
+  <div class="login-card">
+    <h2>Login</h2>
+    <form method="POST">
+      {% csrf_token %}
+
+      <input type="text" name="username" placeholder="Username" />
+
+      <input type="password" name="password" placeholder="Password" />
+
+      <button type="submit">Login</button>
+    </form>
+    <div class="form-link">
+      <p>Don't have an account? <a href="{% url 'accounts:signup' %}">Sign Up</a></p>
     </div>
+  </div>
+</div>
 {% endblock %}

@@ -2,78 +2,45 @@
 {% load static %}
 {% block content %}
 
-      <div class="search-box">
-        <input type="text" placeholder="Search logs..." />
+<div class="search-box">
 
-        <select>
-          <option>All Status</option>
-          <option>Completed</option>
-          <option>Pending</option>
-          <option>In Progress</option>
-        </select>
-      </div>
+<form method="GET">
+
+<input type="text" name="search" placeholder="Search logs..." value="{{ request.GET.search }}">
+
+<select name="status">
+<option value="">All Status</option>
+<option value="Completed">Completed</option>
+<option value="Pending">Pending</option>
+<option value="In Progress">In Progress</option>
+</select>
+
+<button type="submit">Search</button>
+
+</form>
+
+</div>
 
       <table>
-        <tr>
-          <th>Date</th>
-          <th>Employee</th>
-          <th>Task</th>
-          <th>Location</th>
-          <th>Problem</th>
-          <th>challenge</th>
-          <th>Take Home</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
 
-        <tr>
-          <td>06/03/2026</td>
-          <td>Paul</td>
-          <td>D2</td>
-          <td>Printer Installation</td>
-          <td>Printer offline</td>
-          <td>N/A</td>
-          <td>Take Home</td>
-          <td class="status-completed">Completed</td>
-          <td>
-            <button class="view">View</button>
-            <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
-          </td>
-        </tr>
+<tr>
+<th>Ticket</th>
+<th>Date</th>
+<th>Task</th>
+<th>Status</th>
+</tr>
 
-        <tr>
-          <td>06/03/2026</td>
-          <td>James</td>
-          <td>D1</td>
-          <td>Network Setup</td>
-          <td>No internet</td>
-          <td>Take Home</td>
-          <td>Configuration </td>
-          
-          <td class="status-progress">In Progress</td>
-          <td>
-            <button class="view">View</button>
-            <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
-          </td>
-        </tr>
+{% for log in logs %}
 
-        <tr>
-          <td>06/03/2026</td>
-          <td>Mary</td>
-          <td>Dessra Accounts</td>
-          <td>Router Configuration</td>
-          <td>Wrong IP</td>
-          <td>N/A</td>
-          <td>Take Home</td>
-          <td class="status-pending">Pending</td>
-          <td>
-            <button class="view">View</button>
-            <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
-          </td>
-        </tr>
-      </table>
+<tr>
+<td>{{ log.ticket_id }}</td>
+<td>{{ log.date }}</td>
+<td>{{ log.task }}</td>
+<td>{{ log.status }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
     </div>
 {% endblock %}

@@ -120,7 +120,7 @@ td{
 <a href="{% url 'logs:viewLogs' %}">View Logs</a>
 <a href="{% url 'logs:reports' %}">Reports</a>
 <a href="#">Settings</a>
-<a href="#">Logout</a>
+<a href="{% url 'accounts:logout' %}">Logout</a>
 </div>
 
 <!-- Main Content -->
@@ -130,42 +130,70 @@ td{
 </div>
 
 <!-- Filters -->
-<div class="filters">
-<input type="date" placeholder="Start Date">
-<input type="date" placeholder="End Date">
-<select>
-<option>All Employees</option>
-<option>Paul</option>
-<option>James</option>
-<option>Mary</option>
+<form method="GET" class="filters">
+
+<input type="date" name="start_date" value="{{ request.GET.start_date }}">
+<input type="date" name="end_date" value="{{ request.GET.end_date }}">
+
+<select name="employee">
+<option value="">All Employees</option>
+{% for emp in employees %}
+<option value="{{ emp.id }}" {% if request.GET.employee == emp.id|stringformat:"s" %}selected{% endif %}>{{ emp.username }}</option>
+{% endfor %}
 </select>
-<select>
-<option>All Status</option>
-<option>Completed</option>
-<option>Pending</option>
-<option>In Progress</option>
+
+<select name="status">
+<option value="">All Status</option>
+<option value="Completed" {% if request.GET.status == "Completed" %}selected{% endif %}>Completed</option>
+<option value="Pending" {% if request.GET.status == "Pending" %}selected{% endif %}>Pending</option>
+<option value="In Progress" {% if request.GET.status == "In Progress" %}selected{% endif %}>In Progress</option>
 </select>
-<button>Generate</button>
+
+<select name="sort">
+<option value="">Sort By</option>
+<option value="date" {% if request.GET.sort == "date" %}selected{% endif %}>Date</option>
+<option value="status" {% if request.GET.sort == "status" %}selected{% endif %}>Status</option>
+<option value="employee" {% if request.GET.sort == "employee" %}selected{% endif %}>Employee</option>
+</select>
+
+<button type="submit">Generate</button>
+</form>
+
+<div style="margin-bottom:10px;">
+
+<a href="{% url 'logs:export_excel' %}">
+<button>Export Excel</button>
+</a>
+
+<a href="{% url 'logs:export_pdf' %}">
+<button>Export PDF</button>
+</a>
+
 </div>
 
 <!-- Summary Cards -->
 <div class="cards">
+
 <div class="card">
-<h2>25</h2>
+<h2>{{ total_logs }}</h2>
 <p>Total Tasks</p>
 </div>
+
 <div class="card">
-<h2>18</h2>
+<h2>{{ completed }}</h2>
 <p>Completed</p>
 </div>
+
 <div class="card">
-<h2>4</h2>
+<h2>{{ pending }}</h2>
 <p>Pending</p>
 </div>
+
 <div class="card">
-<h2>3</h2>
+<h2>{{ progress }}</h2>
 <p>In Progress</p>
 </div>
+
 </div>
 
 <!-- Charts -->
@@ -180,29 +208,25 @@ td{
 <th>Date</th>
 <th>Employee</th>
 <th>Task</th>
+<th>Location</th>
+<th>Problem</th>
+<th>Solution</th>
 <th>Status</th>
 </tr>
+{% for log in logs %}
+
 <tr>
-<td>IT001</td>
-<td>06/03/2026</td>
-<td>Paul</td>
-<td>Printer Installation</td>
-<td>Completed</td>
+<td>{{ log.ticket_id }}</td>
+<td>{{ log.date }}</td>
+<td>{{ log.employee }}</td>
+<td>{{ log.task }}</td>
+<td>{{ log.location }}</td>
+<td>{{ log.problem }}</td>
+<td>{{ log.solution }}</td>
+<td>{{ log.status }}</td>
 </tr>
-<tr>
-<td>IT002</td>
-<td>06/03/2026</td>
-<td>James</td>
-<td>Router Configuration</td>
-<td>In Progress</td>
-</tr>
-<tr>
-<td>IT003</td>
-<td>06/03/2026</td>
-<td>Mary</td>
-<td>Software Installation</td>
-<td>Pending</td>
-</tr>
+
+{% endfor %}
 </table>
 </div>
 
@@ -210,6 +234,70 @@ td{
 
 <!-- Chart JS Script -->
 <script src="code.js"></script>
+
+
+<script>
+const statusCtx = document.getElementById('statusChart');
+
+new Chart(statusCtx, {
+type: 'pie',
+
+data: {
+labels: ['Completed', 'Pending', 'In Progress'],
+
+datasets: [{
+data: [
+{{ completed|default:0 }},
+{{ pending|default:0 }},
+{{ progress|default:0 }}
+],
+
+backgroundColor: [
+'#10B981',
+'#EF4444',
+'#F59E0B'
+]
+}]
+}
+
+});
+</script>
+
+<script>
+
+const employeeCtx = document.getElementById('employeeChart');
+
+new Chart(employeeCtx, {
+
+type: 'bar',
+
+data: {
+
+labels: [
+{% for emp in employee_stats %}
+'{{ emp.employee__username }}',
+{% endfor %}
+],
+
+datasets: [{
+
+label: 'Tasks',
+
+data: [
+{% for emp in employee_stats %}
+{{ emp.total }},
+{% endfor %}
+],
+
+backgroundColor: '#3B82F6'
+
+}]
+
+}
+
+});
+
+</script>
 
 </body>
 </html>

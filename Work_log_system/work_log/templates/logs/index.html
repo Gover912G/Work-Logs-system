@@ -1,16 +1,73 @@
 {% extends 'logs/base.html' %}
 {% load static %}
+
 {% block content %}
 
-    <div class="container">
-      <div class="card">
-        <h3>Total Tasks Today: 15</h3>
-      </div>
+<div class="container">
 
-      <div class="card">
-        <h3>Recent Activity</h3>
-        <p>Paul installed printer - Completed</p>
-      </div>
+  <div class="cards">
+
+    <div class="card">
+      <h2>{{ total_logs }}</h2>
+      <p>Total Logs</p>
     </div>
+
+    <div class="card">
+      <h2>{{ completed }}</h2>
+      <p>Completed</p>
+    </div>
+
+    <div class="card">
+      <h2>{{ pending }}</h2>
+      <p>Pending</p>
+    </div>
+
+    <div class="card">
+      <h2>{{ progress }}</h2>
+      <p>In Progress</p>
+    </div>
+
+  </div>
+
+  <h2>Task Status Overview</h2>
+
+  <canvas id="statusChart"></canvas>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('statusChart').getContext('2d');
+
+new Chart(ctx, {
+
+    type: 'pie',
+
+    data: {
+
+        labels: ['Completed','Pending','In Progress'],
+
+        datasets: [{
+            data: [
+                {{ completed|default:0 }},
+                {{ pending|default:0 }},
+                {{ progress|default:0 }}
+            ],
+
+            backgroundColor: [
+                '#10B981',
+                '#EF4444',
+                '#F59E0B'
+            ]
+
+        }]
+
+    }
+
+});
+
+</script>
 
 {% endblock %}
